@@ -23,17 +23,9 @@ function localSignin(req, res, next){
 }
 
 function localSignup(req, res, next){
-    passport.authenticate('local-signin', function(err, user, info) {
-        if (err) { 
-            return next(err) 
-        }
-        // if (!user) {
-        //     return res.send({message: "You need to provide valid credentials"});
-        // }
-        req.logIn(user, function(err) {
-            if (err) { return next(err); }
-            return res.redirect('/profile');
-        });
+    passport.authenticate('local-signup',  
+    {   successRedirect: '/profile',
+        failureRedirect: '/signup'
     })(req, res, next);
 }
 

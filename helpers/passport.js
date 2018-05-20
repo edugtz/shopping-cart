@@ -12,13 +12,12 @@ passport.serializeUser(function(User, done) {
 // used to deserialize the user
 passport.deserializeUser(function(idUser, done) {
     User.findById(idUser).then(function(user) {
-        if(user){
-            done(null, user.get());
-        }
-        else{
-            // done("it fails", null);
-            done(user.errors, null);
-        }
+      if(user){
+        done(null, user.get());
+      }
+      else{
+        done(null, false);
+      }
     });
 });
 
@@ -30,7 +29,15 @@ passport.use('local-signup', new LocalStrategy(
     },
 
     function(req, username, password, done){
-        console.log(req);
+        var name = req.body.name;
+        var lastName = req.body.lastName;
+        
+        if(!name){
+            return done(null, false, {message : 'You need to provide your name'} );
+        }
+        if(!lastName){
+            return done(null, false, {message : 'You need to provide your last name'} );
+        }
         var generateHash = function(password) {
             return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
         };
@@ -44,8 +51,8 @@ passport.use('local-signup', new LocalStrategy(
                 var userPassword = generateHash(password);
                 var data = { username:username,
                     password:userPassword,
-                    name: req.body.name,
-                    lastName: req.body.lastName
+                    name: name,
+                    lastName: lastName
                 };
 
                 User.create(data).then(function(newUser,created){
@@ -64,7 +71,6 @@ passport.use('local-signup', new LocalStrategy(
 
 passport.use('local-signin', new LocalStrategy(
     {
-        // by default, local strategy uses username and password
         usernameField : 'username',
         passwordField : 'password',
         passReqToCallback : true // allows us to pass back the entire request to the callback
@@ -96,6 +102,4 @@ passport.use('local-signin', new LocalStrategy(
         });
     }
 ));
-
-// passport.use(localSignin);
 
