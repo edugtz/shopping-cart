@@ -3,6 +3,7 @@
 var express = require('express');
 var api = express.Router();
 var auth = require('../controllers/authController');
+var productRoutes = require('./products');
 
 api.post('/signin', auth.localSignin);
 api.post('/signup', auth.localSignup);
@@ -19,4 +20,7 @@ api.get('/checkauth', auth.isAuthenticated, function(req, res, next){
         status: 'You are logged in!!'
     });
 });
+
+api.use('/products', productRoutes);
+
 module.exports = api;
