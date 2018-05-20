@@ -38,10 +38,12 @@ function localSignup(req, res, next){
 }
 
 function logout(req, res, next){
-    req.session.destroy(function(err) {
-        res.status(200).json('You have successfully logged out');
-        res.redirect('/');
-    });
+    if(req.user){
+        req.session = null;
+        return res.status(200).json('You have successfully logged out');
+    } else {
+        return res.status(200).json('You need to log in first');
+    }
 }
 
 function isLoggedIn(req, res, next) {

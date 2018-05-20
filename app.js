@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var passport = require('passport');
 var session = require('express-session');
+var cookieSession = require('cookie-session');
 var db = require('./models/index');
 
 var app = express();
@@ -14,6 +15,12 @@ var api = require('./routes/index');
 // For BodyParser
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+app.use(cookieSession({
+  name: 'shopping-cart',
+  keys: ['express-session'],
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}));
 
 // Enable CORS
 app.use(cors());

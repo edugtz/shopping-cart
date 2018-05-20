@@ -25,7 +25,7 @@ api.get('/profile', auth.isLoggedIn, function(req, res, next){
     return res.send({status:"Welcome to your profile"});
 });
 api.get('/checkauth', auth.isAuthenticated, function(req, res, next){
-    res.status(200).json({
+    return res.status(200).json({
         status: 'You are logged in!!'
     });
 });
