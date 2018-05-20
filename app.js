@@ -11,14 +11,20 @@ var db = require('./models/index');
 var app = express();
 var api = require('./routes/index');
 
+// For BodyParser
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-// We enable cors for general use
+// Enable CORS
 app.use(cors());
 
-app.use('/', api);
+// For Passport
+app.use(session({ secret: 'express-session',resave: true, saveUninitialized:true})); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
+
+app.use('/', api);
 
 //Sync Database
 db.sequelize.sync().then(function() {
@@ -33,7 +39,7 @@ db.sequelize.sync().then(function() {
 
 }).catch(function(err) {
 
-  console.log(err, "Something went wrong with the Database Update!")
+  console.log(err, "Something went wrong with the database update!")
 
 });
 
