@@ -6,19 +6,22 @@ var User = require('../models').user;
 var LocalStrategy = require('passport-local').Strategy;
 
 passport.serializeUser(function(User, done) {
-        done(null, User.idUser);
+    // console.log(User);
+    done(null, User);
 });
 
 // used to deserialize the user
-passport.deserializeUser(function(idUser, done) {
-    User.findById(idUser).then(function(user) {
-      if(user){
-        done(null, user.get());
-      }
-      else{
-        done(null, false);
-      }
-    });
+passport.deserializeUser(function(User, done) {
+    done(null, User);
+    // console.log(idUser);
+    // User.findById(idUser).then(function(user) {
+    //     if(user){
+    //         done(null, user.get());
+    //     }
+    //     else{
+    //         done(null, false);
+    //     }
+    // });
 });
 
 passport.use('local-signup', new LocalStrategy(

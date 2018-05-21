@@ -21,7 +21,3 @@ module.exports.product = function(req, res, next){
         }
     })
 }
-
-// module.exports = {
-//     list
-// }

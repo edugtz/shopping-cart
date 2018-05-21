@@ -8,7 +8,8 @@ module.exports =
         "database": "shopping-cart",
         "host": "127.0.0.1",
         "dialect": "postgres",
-        "operatorsAliases": Sequelize.Op
+        "operatorsAliases": Sequelize.Op,
+        logging: false
     },
     "test": {
         "username": "",

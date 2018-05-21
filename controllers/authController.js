@@ -31,17 +31,12 @@ function localSignup(req, res, next){
 
 function logout(req, res, next){
     if(req.user){
-        req.session = null;
+        // req.session = null;
+        req.session.destroy();
         return res.status(200).json('You have successfully logged out');
     } else {
         return res.status(200).json('You need to log in first');
     }
-}
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    res.redirect('/signin');
 }
 
 function isAuthenticated (req,res,next){
@@ -49,12 +44,11 @@ function isAuthenticated (req,res,next){
        return next();
     else
        return res.status(401).json({
-         error: 'User not authenticated'
+         status: 'User not authenticated'
        })
  }
 
 module.exports = {
-    isLoggedIn,
     logout,
     isAuthenticated,
     localSignin,
