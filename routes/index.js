@@ -6,6 +6,7 @@ var auth = require('../controllers/authController');
 var productRoutes = require('./product');
 var cartRoutes = require('./cart');
 
+// These are the main routes of the app
 api.post('/signin', auth.localSignin);
 api.post('/signup', auth.localSignup);
 api.get('/logout', auth.logout);
@@ -22,7 +23,9 @@ api.get('/checkauth', auth.isAuthenticated, function(req, res, next){
     });
 });
 
+// We tell express to use the product and shopping cart routes
 api.use('/products', productRoutes);
 api.use('/cart', cartRoutes);
 
+// Export what we need so we can use it in other modules/files
 module.exports = api;

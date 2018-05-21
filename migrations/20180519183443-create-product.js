@@ -1,4 +1,5 @@
 'use strict';
+// This is a migration for the products table
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('products', {

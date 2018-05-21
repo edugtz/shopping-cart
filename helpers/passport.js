@@ -5,25 +5,16 @@ var passport = require('passport');
 var User = require('../models').user;
 var LocalStrategy = require('passport-local').Strategy;
 
+// Standard methods used by passport between subsequent requests to store user data within the session
 passport.serializeUser(function(User, done) {
-    // console.log(User);
     done(null, User);
 });
 
-// used to deserialize the user
 passport.deserializeUser(function(User, done) {
     done(null, User);
-    // console.log(idUser);
-    // User.findById(idUser).then(function(user) {
-    //     if(user){
-    //         done(null, user.get());
-    //     }
-    //     else{
-    //         done(null, false);
-    //     }
-    // });
 });
 
+// This is a local strategy for signing up
 passport.use('local-signup', new LocalStrategy(
     {           
         usernameField : 'username',
@@ -72,6 +63,7 @@ passport.use('local-signup', new LocalStrategy(
     }
 ));
 
+// This is a local strategy for signin in
 passport.use('local-signin', new LocalStrategy(
     {
         usernameField : 'username',

@@ -1,3 +1,9 @@
+'use strict'
+
+/**
+*  This is a helper function to add, remove and retrieve products from the shopping cart
+* @param {object} oldCart Object containing all previous product data saved in the shopping cart
+ */
 module.exports = function Cart(oldCart){
     this.items = oldCart.items || {};
     this.totalQty = oldCart.totalQty || 0;
@@ -12,10 +18,16 @@ module.exports = function Cart(oldCart){
         this.totalQty++;
     };
 
-    this.removeItem = function(id){
-        this.totalQty -= this.items[id].qty;
-        delete this.items[id]
-    }
+    this.remove = function (id) {
+        this.items[id].qty--;
+        this.items[id].price -= this.items[id].item.price;
+        this.totalQty--;
+        this.totalPrice -= this.items[id].item.price;
+
+        if(this.items[id].qty <= 0) {
+            delete this.items[id];
+        }
+    };
   
     this.getItems = function(){
         var arr = [];

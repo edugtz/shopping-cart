@@ -3,6 +3,12 @@
 var Cart = require('../helpers/cart');
 var Product = require('../models').product;
 
+/**
+*  This function add an specific product to the shopping cart
+* @param {object} request JSON containing all the parameters sent with the request.
+* @param {object} response This is a response from the server.
+* @param {function()} next This is a callback.
+ */
 module.exports.addToCart = function(req, res, next){
     var idProduct = req.params.idProduct;
     var cart = new Cart(req.session.cart ? req.session.cart : {});
@@ -13,31 +19,58 @@ module.exports.addToCart = function(req, res, next){
             cart.add(product, product.idProduct);
             req.session.cart = cart;
             req.session.save();
+            return res.send({message: "Product added to the cart"});
+
         } else{
             return res.send({message: "We currently don't have the specified product"});
         }
     })
 }
 
+/**
+*  This function removes an specific product from the shopping cart
+* @param {object} request JSON containing all the parameters sent with the request.
+* @param {object} response This is a response from the server.
+* @param {function()} next This is a callback.
+ */
 module.exports.removeItem = function(req, res, next){
     var productId = req.params.id;
     var cart = new Cart(req.session.cart ? req.session.cart : {});
-  
-    cart.removeItem(productId);
-    req.session.cart = cart;
-    req.session.save();
-    res.status(200).send({status: "You have successfully removed one item from the cart"});
+    
+    if(!req.session.cart){
+        return res.status(500).send({status: 'The shopping cart is empty'});
+    } else {
+        cart.remove(productId);
+        req.session.cart = cart;
+
+        if(req.session.cart.totalQty == 0){
+            delete req.session.cart;
+        }
+        req.session.save();
+        res.status(200).send({status: "You have successfully removed one item from the cart"});
+    }
 }
 
+/**
+*  This function empties the shopping cart
+* @param {object} request JSON containing all the parameters sent with the request.
+* @param {object} response This is a response from the server.
+* @param {function()} next This is a callback.
+ */
 module.exports.emptyCart = function(req, res, next){
     var cart = new Cart(req.session.cart ? req.session.cart : {});
-    // cart.emptyCart();
-    // req.session.cart = cart;
     delete req.session.cart;
     req.session.save();
+
     res.status(200).send({status: "The cart is now empty"});
 };
  
+/**
+*  This function shows what we currently have in our shopping cart as a summary
+* @param {object} request JSON containing all the parameters sent with the request.
+* @param {object} response This is a response from the server.
+* @param {function()} next This is a callback.
+ */
 module.exports.checkout = function(req, res, next){
     if(!req.session.cart){
         return res.status(500).send({status: 'There are no products in the shopping cart'});
@@ -69,9 +102,7 @@ module.exports.checkout = function(req, res, next){
     });
     totalPrice = parseFloat(totalPrice).toFixed(2);
 
-    if(products.length == 0){
-        res.status(200).send({products: 'There are no products in the shopping cart', totalQuantity: totalQuantity, totalPrice: totalPrice});
-    } else {
+    if(products.length != 0){
         res.status(200).send({products: products, totalQuantity: totalQuantity, totalPrice: totalPrice});
     }
 

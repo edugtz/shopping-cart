@@ -1,5 +1,6 @@
 var Sequelize = require('sequelize');
 
+// Global configuration variables for sequelize connection to PostgreSQL
 module.exports =
 {
     "development": {

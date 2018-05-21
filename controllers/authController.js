@@ -7,6 +7,12 @@ var bcrypt = require('bcrypt-nodejs');
 var passport = require('passport');
 var passportService = require('../helpers/passport');
 
+/**
+*  This function logs the user in
+* @param {object} request JSON containing all the parameters sent with the request.
+* @param {object} response This is a response from the server.
+* @param {function()} next This is a callback.
+ */
 function localSignin(req, res, next){
     passport.authenticate('local-signin', function(err, user, info) {
         if (err) { 
@@ -22,6 +28,12 @@ function localSignin(req, res, next){
     })(req, res, next);
 }
 
+/**
+*  This function signs up a new user and creates his account
+* @param {object} request JSON containing all the parameters sent with the request.
+* @param {object} response This is a response from the server.
+* @param {function()} next This is a callback.
+ */
 function localSignup(req, res, next){
     passport.authenticate('local-signup',  
     {   successRedirect: '/profile',
@@ -29,6 +41,12 @@ function localSignup(req, res, next){
     })(req, res, next);
 }
 
+/**
+*  This destroys the session of the currently authenticated user
+* @param {object} request JSON containing all the parameters sent with the request.
+* @param {object} response This is a response from the server.
+* @param {function()} next This is a callback.
+ */
 function logout(req, res, next){
     if(req.user){
         // req.session = null;
@@ -39,6 +57,12 @@ function logout(req, res, next){
     }
 }
 
+/**
+*  This function acts as a middleware to check if a user is authenticated
+* @param {object} request JSON containing all the parameters sent with the request.
+* @param {object} response This is a response from the server.
+* @param {function()} next This is a callback.
+ */
 function isAuthenticated (req,res,next){
     if(req.user)
        return next();
@@ -48,6 +72,7 @@ function isAuthenticated (req,res,next){
        })
  }
 
+// Export what we need so we can use it in other modules/files
 module.exports = {
     logout,
     isAuthenticated,
