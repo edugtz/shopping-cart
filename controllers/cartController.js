@@ -15,14 +15,13 @@ module.exports.addToCart = function(req, res, next){
 
     Product.findById(idProduct).then(function(product) {
         if(product){
-            // return res.status(200).send({product:product});
             cart.add(product, product.idProduct);
             req.session.cart = cart;
             req.session.save();
-            return res.send({message: "Product added to the cart"});
+            return res.status(200).send({message: "Product added to the cart"});
 
         } else{
-            return res.send({message: "We currently don't have the specified product"});
+            return res.status(404).send({message: "We currently don't have the specified product"});
         }
     })
 }
@@ -38,7 +37,7 @@ module.exports.removeItem = function(req, res, next){
     var cart = new Cart(req.session.cart ? req.session.cart : {});
     
     if(!req.session.cart){
-        return res.status(500).send({status: 'The shopping cart is empty'});
+        return res.status(500).send({message: 'The shopping cart is empty'});
     } else {
         cart.remove(productId);
         req.session.cart = cart;
@@ -47,7 +46,7 @@ module.exports.removeItem = function(req, res, next){
             delete req.session.cart;
         }
         req.session.save();
-        res.status(200).send({status: "You have successfully removed one item from the cart"});
+        res.status(200).send({message: "You have successfully removed one item from the cart"});
     }
 }
 
@@ -62,7 +61,7 @@ module.exports.emptyCart = function(req, res, next){
     delete req.session.cart;
     req.session.save();
 
-    res.status(200).send({status: "The cart is now empty"});
+    res.status(200).send({message: "The cart is now empty"});
 };
  
 /**
@@ -73,7 +72,7 @@ module.exports.emptyCart = function(req, res, next){
  */
 module.exports.checkout = function(req, res, next){
     if(!req.session.cart){
-        return res.status(500).send({status: 'There are no products in the shopping cart'});
+        return res.status(500).send({message: 'There are no products in the shopping cart'});
     }
     var cart = new Cart(req.session.cart);
     var totalPrice = 0;

@@ -19,11 +19,11 @@ function localSignin(req, res, next){
             return next(err) 
         }
         if (!user) {
-            return res.send({status: "You need to provide valid credentials"});
+            return res.status(401).send({message: "You need to provide valid credentials"});
         }
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            return res.send({status: "You have successfully logged in"});
+            return res.status(200).send({message: "You have successfully logged in"});
         });
     })(req, res, next);
 }
@@ -35,9 +35,18 @@ function localSignin(req, res, next){
 * @param {function()} next This is a callback.
  */
 function localSignup(req, res, next){
-    passport.authenticate('local-signup',  
-    {   successRedirect: '/profile',
-        failureRedirect: '/signup'
+    passport.authenticate('local-signup', function(err, user, info) {
+        if (err) { 
+            return next(err) 
+        }
+        if(user){
+            return res.status(200).send({message: "Your account has been successfully created"});            
+        } else {
+            return res.status(200).send({message: info.message});            
+        }
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+        });
     })(req, res, next);
 }
 
@@ -51,9 +60,9 @@ function logout(req, res, next){
     if(req.user){
         // req.session = null;
         req.session.destroy();
-        return res.status(200).json('You have successfully logged out');
+        return res.status(200).send({message: 'You have successfully logged out'});
     } else {
-        return res.status(200).json('You need to log in first');
+        return res.status(401).send({message: 'You need to log in first'});
     }
 }
 
@@ -67,8 +76,8 @@ function isAuthenticated (req,res,next){
     if(req.user)
        return next();
     else
-       return res.status(401).json({
-         status: 'User not authenticated'
+       return res.status(401).send({
+        message: 'User not authenticated'
        })
  }
 

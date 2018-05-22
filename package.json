@@ -4,7 +4,8 @@
   "description": "Basic API for a shopping cart",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "test": "mocha --timeout 100000"
   },
   "author": "Eduardo Gutiérrez",
   "license": "ISC",

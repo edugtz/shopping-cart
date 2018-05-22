@@ -61,7 +61,7 @@ module.exports.createProduct = function(req, res, next){
     
     Product.create({code: code, name: name, description: description, price:price}).then(function(product) {
         if(product){
-            return res.status(200).send({message: 'The product was successfully created'});
+            return res.status(200).send({message: 'The product was successfully created', product:product});
         } else{
             return res.send({message: "An error has occurred"});
         }
