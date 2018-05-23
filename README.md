@@ -9,7 +9,7 @@ or
 ```
 git init
 git remote add origin https://eduardo2325@bitbucket.org/eduardo2325/shopping-cart.git
-git pull origin master```
+git pull origin master
 ```
 **2. Install sequelize-cli to be able to run commands for the database**
 ##### Globally
@@ -22,24 +22,24 @@ npm install -g sequelize-cli
 Now you can run CLI using following command anywhere
 
 ```
-$ sequelize
+sequelize
 ```
 
 ##### Locally
 Install CLI locally to your `node_modules` folder with
 
 ```
-$ npm install --save sequelize-cli
+npm install --save sequelize-cli
 ```
 
 You should be able to run CLI with
 
-```bash
-$ node_modules/.bin/sequelize
+```
+node_modules/.bin/sequelize
 ```
 **3. Install necessary dependencies**
 ```
-    npm install 
+npm install 
 ```
 **4. In the root of the project folder we have to run the following commands to create the database, models and populate the database**
 
